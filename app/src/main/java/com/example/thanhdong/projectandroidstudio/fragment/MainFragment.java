@@ -136,6 +136,7 @@ public class MainFragment extends Fragment implements RecyclerViewHorizontalAdap
         });
 
         recyclerViewHorizontal();
+        staggeredRecyclerView();
 //        bottomNavigationView();
     }
 
@@ -273,6 +274,24 @@ public class MainFragment extends Fragment implements RecyclerViewHorizontalAdap
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
+                // number of visible items
+                int visibleItemCount = linearLayoutManager.getChildCount();
+                // number of items in layout
+                int totalItemCount = linearLayoutManager.getItemCount();
+                // the position of first visible item
+                int firstVisibleItemPosition = linearLayoutManager.findFirstVisibleItemPosition();
+
+                boolean isNotLoadingAndNotLastPage = !mIsLoading && !mIsLastPage;
+                // flag if number of visible items is at the last
+                boolean isAtLastItem = firstVisibleItemPosition + visibleItemCount >= totalItemCount;
+                // validate non negative values
+                boolean isValidFirstItem = firstVisibleItemPosition >= 0;
+                // validate total items are more than possible visible items
+                boolean totalIsMoreThanVisible = totalItemCount >= pageSize;
+                // flag to know whether to load more
+                boolean shouldLoadMore = isValidFirstItem && isAtLastItem && totalIsMoreThanVisible && isNotLoadingAndNotLastPage;
+
+                if (shouldLoadMore) loadMorePage(false);
             }
         });
     }
