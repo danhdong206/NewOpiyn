@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#008577</color>
+    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorAccent">#D81B60</color>
+
+    <color name="color_status_bar">#000000</color>
+    <!--Splash Screen-->
+    <color name="color_background_splash_screen">#FEC02E</color>
+
+    <!--Choose Language Screen-->
+    <color name="color_text_choose_language">#B5B5B5</color>
+    <color name="color_text_default">#B5B5B5</color>
+    <color name="color_text_selected">#FEC02E</color>
+    <color name="color_text_changelanguage">#B5B5B5</color>
+    <color name="color_text_settings">#4A4A4A</color>
+
+    <!--On Boarding Screen 1-->
+    <color name="color_text">#B5B5B5</color>
+    <color name="color_background_button">#EFEFEF</color>
+    <color name="color_indicator">#4A4A4A</color>
+
+    <!--Highlight-->
+    <color name="bg_main">#ffffff</color>
+    <color name="color_border">#EAEAEA</color>
+    <color name="color_text_review">#C0C0C0</color>
+    <color name="color_search">#B5B5B6</color>
+</resources>
