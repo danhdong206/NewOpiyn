@@ -208,18 +208,4 @@ public class StaggeredRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
         return mDataList.size();
     }
 
-    public List<Highlight> getmDataList() {
-        return mDataList;
-    }
-
-    public void setmDataList(List<Highlight> mDataList) {
-        this.mDataList = mDataList;
-        notifyDataSetChanged();
-    }
-
-    public void addAll(List<Highlight> mNewDataList) {
-        int lastIndex = mDataList.size() - 1;
-        mDataList.addAll(mNewDataList);
-        notifyItemRangeInserted(lastIndex, mNewDataList.size());
-    }
 }
