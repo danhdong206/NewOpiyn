@@ -2,6 +2,7 @@ package com.example.thanhdong.projectandroidstudio.fragment;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
@@ -10,6 +11,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.text.SpannableString;
 import android.text.Spanned;
@@ -26,6 +28,7 @@ import android.widget.TextView;
 
 import com.example.thanhdong.projectandroidstudio.activity.OnBoardingScreen1Activity;
 import com.example.thanhdong.projectandroidstudio.R;
+import com.example.thanhdong.projectandroidstudio.utils.Constants;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -210,6 +213,7 @@ public class ChooseLanguageScreenFragment extends Fragment {
             mBtnChecked.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    saveChooseLanguage(positionSelected);
                     Intent intent = new Intent(getContext(), OnBoardingScreen1Activity.class);
                     startActivity(intent);
                 }
@@ -218,5 +222,12 @@ public class ChooseLanguageScreenFragment extends Fragment {
             mBtnChecked.setBackgroundResource(R.drawable.btn_check);
         }
 
+    }
+
+    private void saveChooseLanguage(int positionSelected){
+        SharedPreferences sharedPreferences = getContext().getSharedPreferences(Constants.PREFERENCES, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt(Constants.KEY_LANGUAGE, positionSelected);
+        editor.commit();
     }
 }
