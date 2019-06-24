@@ -3,6 +3,7 @@ package com.example.thanhdong.projectandroidstudio.fragment;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
@@ -30,6 +31,7 @@ import android.widget.TextView;
 import com.example.thanhdong.projectandroidstudio.activity.MainActivity;
 import com.example.thanhdong.projectandroidstudio.R;
 import com.example.thanhdong.projectandroidstudio.ViewPagerAdapter;
+import com.example.thanhdong.projectandroidstudio.utils.Constants;
 
 import me.relex.circleindicator.CircleIndicator;
 
@@ -113,6 +115,7 @@ public class OnBoardingScreen1Fragment extends Fragment{
         mBtnGetIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                saveOnBoarding(mBtnGetIn.getText().toString());
                 Intent intent = new Intent(getContext(), MainActivity.class);
                 startActivity(intent);
             }
@@ -244,5 +247,12 @@ public class OnBoardingScreen1Fragment extends Fragment{
 
         mTextViewPrivacy.setText(spannableString);
         mTextViewPrivacy.setMovementMethod(LinkMovementMethod.getInstance());
+    }
+
+    private void saveOnBoarding(String getIn){
+        SharedPreferences sharedPreferences = getContext().getSharedPreferences(Constants.PREFERENCES, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(Constants.KEY_ON_BOARDING, getIn);
+        editor.commit();
     }
 }

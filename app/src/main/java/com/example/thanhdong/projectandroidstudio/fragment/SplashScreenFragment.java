@@ -2,6 +2,7 @@ package com.example.thanhdong.projectandroidstudio.fragment;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -18,6 +19,9 @@ import android.view.WindowManager;
 
 import com.example.thanhdong.projectandroidstudio.activity.ChooseLanguageScreenAcitivity;
 import com.example.thanhdong.projectandroidstudio.R;
+import com.example.thanhdong.projectandroidstudio.activity.MainActivity;
+import com.example.thanhdong.projectandroidstudio.activity.OnBoardingScreen1Activity;
+import com.example.thanhdong.projectandroidstudio.utils.Constants;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -32,7 +36,6 @@ public class SplashScreenFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-
 
 
     // TODO: Rename and change types of parameters
@@ -90,9 +93,19 @@ public class SplashScreenFragment extends Fragment {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent mainIntent = new Intent(getContext(), ChooseLanguageScreenAcitivity.class);
-                startActivity(mainIntent);
-                getActivity().finish();
+                if (!hasSelectedLanguage()) {
+                    Intent mainIntent = new Intent(getContext(), ChooseLanguageScreenAcitivity.class);
+                    startActivity(mainIntent);
+                    getActivity().finish();
+                } else if (!hasSelectedGetIn()){
+                    Intent intent = new Intent(getContext(), OnBoardingScreen1Activity.class);
+                    startActivity(intent);
+                    getActivity().finish();
+                }else {
+                    Intent intent = new Intent(getContext(), MainActivity.class);
+                    startActivity(intent);
+                }
+
             }
         }, 2000);
     }
@@ -129,4 +142,23 @@ public class SplashScreenFragment extends Fragment {
         void onFragmentInteraction(Uri uri);
     }
 
+    private boolean hasSelectedLanguage() {
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(Constants.PREFERENCES, Context.MODE_PRIVATE);
+        int selectedLanguagePostion = sharedPreferences.getInt(Constants.KEY_LANGUAGE, -1);
+        if (selectedLanguagePostion == -1) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    private boolean hasSelectedGetIn() {
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(Constants.PREFERENCES, Context.MODE_PRIVATE);
+        String selectedGetIn = sharedPreferences.getString(Constants.KEY_ON_BOARDING, null);
+        if (selectedGetIn == null) {
+            return false;
+        } else {
+            return true;
+        }
+    }
 }
