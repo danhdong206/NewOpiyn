@@ -10,6 +10,7 @@ import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,8 +33,6 @@ import com.example.thanhdong.projectandroidstudio.utils.Constants;
  * create an instance of this fragment.
  */
 public class SplashScreenFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
@@ -87,6 +86,10 @@ public class SplashScreenFragment extends Fragment {
         // finally change the color
         window.setStatusBarColor(ContextCompat.getColor(getActivity(), R.color.color_status_bar));
 
+        getFragmentManager().popBackStack(
+                OnBoardingScreen1Fragment.class.getName(),
+                FragmentManager.POP_BACK_STACK_INCLUSIVE
+        );
 
         /* New Handler to start the Menu-Activity
          * and close this Splash-Screen after some seconds.*/

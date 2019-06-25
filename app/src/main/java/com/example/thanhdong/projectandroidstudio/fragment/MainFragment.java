@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
@@ -22,17 +21,21 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.thanhdong.projectandroidstudio.R;
 import com.example.thanhdong.projectandroidstudio.RecyclerViewHorizontalAdapter;
 import com.example.thanhdong.projectandroidstudio.StaggeredRecyclerViewAdapter;
+import com.example.thanhdong.projectandroidstudio.activity.OnBoardingScreen1Activity;
 import com.example.thanhdong.projectandroidstudio.activity.SearchScreenActivity;
 import com.example.thanhdong.projectandroidstudio.retrofitmain.Categories;
+import com.example.thanhdong.projectandroidstudio.retrofitmain.Highlight;
 import com.example.thanhdong.projectandroidstudio.retrofitmain.Highlights;
 import com.example.thanhdong.projectandroidstudio.retrofitmain.JsonPlaceHolderApiMain;
 import com.example.thanhdong.projectandroidstudio.retrofitmain.RetrofitClientInstance;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -60,20 +63,11 @@ public class MainFragment extends Fragment implements RecyclerViewHorizontalAdap
 
     private static final int NUM_COLUMNS = 2;
 
-    StaggeredRecyclerViewAdapter staggeredRecyclerViewAdapter;
-
-
+    private StaggeredRecyclerViewAdapter staggeredRecyclerViewAdapter;
     private RecyclerView recyclerView;
-    ProgressBar progressBar;
-
-    LinearLayoutManager linearLayoutManager;
-    private JsonPlaceHolderApiMain jsonPlaceHolderApiMain;
-    private Boolean mIsLoading = false;
-    private Boolean mIsLastPage = false;
-    private int mCurrentPage = 1;
-
     ProgressDialog progressDialog;
 
+    private JsonPlaceHolderApiMain jsonPlaceHolderApiMain;
 
     private ActionBar mToolBar;
 
@@ -136,6 +130,7 @@ public class MainFragment extends Fragment implements RecyclerViewHorizontalAdap
         });
 
         recyclerViewHorizontal();
+        staggeredRecyclerView();
 //        bottomNavigationView();
     }
 
@@ -226,32 +221,19 @@ public class MainFragment extends Fragment implements RecyclerViewHorizontalAdap
 //        }
 //    };
 
-    private void loadMorePage(final boolean isFirstPage) {
+    private void staggeredRecyclerView() {
         progressDialog = new ProgressDialog(getActivity());
         progressDialog.setMessage("Loading...");
         progressDialog.show();
 
-        mIsLoading = true;
-        mCurrentPage = mCurrentPage + 1;
-
         /*Create handle for the RetrofitInstance interface*/
-        jsonPlaceHolderApiMain = RetrofitClientInstance.getRetrofitInstance().create(JsonPlaceHolderApiMain.class);
-        Call<Highlights> call = jsonPlaceHolderApiMain.getHighlights();
+        JsonPlaceHolderApiMain service = RetrofitClientInstance.getRetrofitInstance().create(JsonPlaceHolderApiMain.class);
+        Call<Highlights> call = service.getHighlights();
         call.enqueue(new Callback<Highlights>() {
             @Override
             public void onResponse(Call<Highlights> call, Response<Highlights> response) {
                 progressDialog.dismiss();
-                Highlights result = generateDataListStaggered(response.body());
-                if (result == null) {
-                    return;
-                } else if (!isFirstPage) {
-                    staggeredRecyclerViewAdapter.addAll(result.getHighlights());
-                } else {
-                    staggeredRecyclerViewAdapter.setmDataList(result.getHighlights());
-                }
-
-                mIsLoading = false;
-                mIsLastPage = mCurrentPage == result.getTotalPages();
+                generateDataListStaggered(response.body());
             }
 
             @Override
@@ -262,28 +244,12 @@ public class MainFragment extends Fragment implements RecyclerViewHorizontalAdap
         });
     }
 
-    private void staggeredRecyclerView() {
-        StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(NUM_COLUMNS, LinearLayoutManager.VERTICAL);
-        jsonPlaceHolderApiMain = RetrofitClientInstance.getRetrofitInstance().create(JsonPlaceHolderApiMain.class);
-        mIsLoading = false;
-        mIsLastPage = false;
-        final int pageSize = 3;
-
-        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-            }
-        });
-    }
-
-    private Highlights generateDataListStaggered(Highlights highlights) {
+    private void generateDataListStaggered(Highlights highlights) {
         RecyclerView recyclerView = getActivity().findViewById(R.id.recyclerview_vertical);
         staggeredRecyclerViewAdapter = new StaggeredRecyclerViewAdapter(getContext(), highlights.getHighlights());
         StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(NUM_COLUMNS, LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(staggeredGridLayoutManager);
         recyclerView.setAdapter(staggeredRecyclerViewAdapter);
-        return highlights;
     }
 
 }
