@@ -5,4 +5,6 @@ public class Constants {
     public static final String PREFERENCES = "Opiyn";
     public static final String KEY_LANGUAGE = "Language";
     public static final String KEY_ON_BOARDING = "OnBoarding";
+
+    //
 }
